@@ -1,0 +1,16 @@
+{
+    "name": "sparxsolver",
+    "version": "1.0.0",
+    "description": "Fully native SparxMaths solver.",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "package-win": "electron-packager . --platform=win32 --arch=x64 --out=release-builds --overwrite",
+        "package-mac": "electron-packager . --platform=darwin --arch=x64 --out=release-builds --overwrite"
+    },
+    "devDependencies": {
+        "electron": "^25.3.0",
+        "electron-packager": "^16.0.0"
+    },
+    "dependencies": {}
+}

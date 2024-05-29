@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SparxSolver</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="/static/js/response.js" defer></script>
+</head>
+<body>
+    <h1 style="margin-top: 30px;">SparxSolver v1.0</h1>
+    <h2>Created by <a href="https://varunaditya.xyz" class="varunaditya" target="_blank">varunaditya.xyz</a></h2>
+    
+    <div class="center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        <form id="upload-form" method="post" enctype="multipart/form-data">
+            <p>Upload or paste images, then click submit and wait.</p>
+            <input type="file" id="file-input" name="files" multiple>
+            <label for="file-input" class="custom-file-upload">Choose files</label>
+            <input type="submit" value="Upload" style="position:absolute; right: 2rem;">
+        </form>
+        <div class="preview" id="preview"></div>
+    </div>
+
+    <script>
+        const preview = document.getElementById('preview');
+        const fileInput = document.getElementById('file-input');
+        const uploadForm = document.getElementById('upload-form');
+        const dataTransfer = new DataTransfer();
+
+        fileInput.addEventListener('change', handleFiles);
+        document.addEventListener('paste', handlePaste);
+
+        uploadForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData();
+
+            const labels = [];
+
+            for (let i = 0; i < dataTransfer.items.length; i++) {
+                formData.append('files', dataTransfer.items[i].getAsFile());
+                const labelInput = preview.children[i].querySelector('input[type="text"]');
+                if (labelInput) {
+                    if (labelInput.value.trim() === '') {
+                        alert('A label is required');
+                        return;
+                    }
+                    labels.push(labelInput.value);
+                }
+            }
+
+            formData.append('labels', labels.join(','));
+
+            const submitButton = uploadForm.querySelector('input[type="submit"]');
+            submitButton.value = 'Loading...';
+            submitButton.disabled = true;
+            submitButton.style.pointerEvents = 'none';
+            submitButton.style.cursor = 'wait';
+            submitButton.style.color = '#747683'
+            submitButton.style.backgroundColor = '#535561'
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.redirectUrl) {
+                    window.location.href = data.redirectUrl;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        function handleFiles(event) {
+            const files = event.target.files;
+            for (let i = 0; i < files.length; i++) {
+                addFileToPreview(files[i]);
+            }
+        }
+
+        function handlePaste(event) {
+            const items = event.clipboardData.items;
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].type.indexOf('image') !== -1) {
+                    addFileToPreview(items[i].getAsFile());
+                }
+            }
+            updateFileInput();
+        }
+
+        function addFileToPreview(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const div = document.createElement('div');
+                const img = document.createElement('img');
+                const textInput = document.createElement('input');
+                const btn = document.createElement('span');
+                const lineBreak = document.createElement('br');
+
+                img.src = e.target.result;
+                textInput.type = 'text';
+                textInput.placeholder = 'Label';
+                textInput.maxLength = 5;
+                textInput.name = 'labels';
+                btn.innerHTML = '&times;';
+                btn.className = 'remove-btn';
+                btn.onclick = function() {
+                    div.remove();
+                    removeFileFromDataTransfer(file);
+                    updateFileInput();
+                };
+
+                div.className = 'imagediv';
+                div.appendChild(img);
+                div.appendChild(lineBreak);
+                div.appendChild(textInput);
+                div.appendChild(btn);
+                preview.appendChild(div);
+            };
+            reader.readAsDataURL(file);
+            dataTransfer.items.add(file);
+        }
+
+        function removeFileFromDataTransfer(file) {
+            for (let i = 0; i < dataTransfer.items.length; i++) {
+                if (dataTransfer.items[i].getAsFile() === file) {
+                    dataTransfer.items.remove(i);
+                    break;
+                }
+            }
+        }
+
+        function updateFileInput() {
+            fileInput.files = dataTransfer.files;
+        }
+    </script>
+</body>
+</html>

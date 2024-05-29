@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/styles.css">
+    <title>Results</title>
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 60px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #4a4d5a;
+            margin: 5% auto;
+            padding: 20px;
+            width: 80%;
+            position: relative;
+            border-radius: 10px;
+        }
+        .gallery {
+            background-color: #4a4d5a;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .gallery div {
+            position: relative;
+            display: inline-block;
+            margin: 5px;
+            width: 100px;
+            height: 100px;
+            overflow: hidden;
+            border: 1px solid black;
+            box-shadow: 5px 5px 0 #00000034;
+            border-radius: 5px;
+        }
+        .gallery img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+        .gallery div::after {
+            content: attr(data-label);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        .gallery div:hover img {
+            filter: brightness(50%);
+        }
+        .gallery div:hover::after {
+            opacity: 1;
+        }
+        #prev-answers-btn {
+            background-color: var(--button-color);
+            color: var(--primary-color);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #prev-answers-btn:hover {
+            background-color: var(--hover-color);
+        }
+        #close-modal {
+            float: right;
+            font-size: 40px;
+            cursor: pointer;
+            position: absolute;
+            top: -25px;
+            right: -10px;
+            color: white;
+        }
+        #close-modal:hover {
+            color: rgb(222, 80, 80);
+        }
+    </style>
+    <script src="/static/js/response.js" defer></script>
+</head>
+<body>
+    <div style="position: absolute; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column;">
+        <h1>Answer(s)</h1>
+        <div style="display: flex;">
+            <div style="flex: 1;">
+                <%- responseHtml %>
+            </div>
+        </div>
+        <button id="prev-answers-btn">Previous Answers</button>
+        <a href="/" style="margin-bottom: 30px;">Upload more images</a>
+    </div>
+
+    <!-- Modal Structure -->
+    <div id="prev-answers-modal" class="modal">
+        <div class="modal-content">
+            <span id="close-modal">&times;</span>
+            <div class="gallery"></div>
+        </div>
+    </div>
+</body>
+</html>

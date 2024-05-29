@@ -1,0 +1,207 @@
+:root {
+    --primary-color: white;
+    --secondary-color: #5aa2f5;
+    --hover-color: #7ab4f7;
+    --error-color: rgb(235, 83, 83);
+    --button-color: #4a4d5a;
+    --box-color: #212227;
+    --shadow-color: #000;
+    --font-primary: Helvetica, Arial, sans-serif;
+    --font-secondary: 'Kaushan Script', sans-serif;
+    --font-bold: 'Hanson-Bold', sans-serif;
+    color-scheme: dark;
+}
+
+@font-face {
+    font-family: 'Kaushan Script';
+    src: url('KaushanScript.ttf');
+}
+
+@font-face {
+    font-family: 'Hanson-Bold';
+    src: url('Hanson-Bold.ttf');
+}
+
+html, body {
+    background: url(bk2.svg) no-repeat center center fixed;
+    background-size: cover;
+    color: var(--primary-color);
+    font-family: var(--font-primary);
+}
+
+/* Layout */
+.preview {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.preview div {
+    position: relative;
+    display: inline-block;
+}
+
+/* Buttons */
+.remove-btn {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    cursor: pointer;
+    color: var(--error-color);
+    font-size: 20px;
+    background: var(--button-color);
+    border: 1px solid var(--error-color);
+    border-radius: 50%;
+    line-height: 0.6;
+    padding: 2px;
+}
+
+.remove-btn:hover {
+    color: var(--button-color);
+    background: var(--error-color);
+}
+
+/* Forms and Inputs */
+form {
+    background-color: var(--box-color);
+    color: var(--primary-color);
+    padding: 2rem 2rem 1rem 2rem ;
+    box-shadow: 0 0 10vw var(--shadow-color);
+    max-width: 800px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+input[type="text"] {
+    width: 100px;
+    margin: 0 9px 10px 9px;
+}
+
+/* Text Elements */
+h1, h2 {
+    text-align: center;
+    margin: 3px auto;
+}
+
+h1 {
+    font-family: var(--font-bold);
+    font-size: 2.5rem;
+    margin: 2rem 0 0 0;
+}
+
+h2 {
+    font-family: var(--font-secondary);
+    font-size: 1.5rem;
+    margin: 0 0 1rem 0;
+}
+
+h3 {
+    font-size: 2vw;
+    margin: 0;
+}
+
+p {
+    margin: 0;
+    margin-bottom: 10px;
+    font-family: var(--font-primary);
+}
+
+/* Links */
+a {
+    text-decoration: none;
+    color: var(--secondary-color);
+    transition: 0.2s;
+}
+
+a:hover {
+    letter-spacing: 1.6px;
+    color: var(--hover-color);
+}
+
+/* Images */
+.preview img {
+    height: 100px;
+    width: 100px;
+    margin: 10px 9px 5px 9px;
+    object-fit: contain;
+    border: 1px solid var(--button-color);
+    border-radius: 10px;
+}
+
+/* Boxes */
+.resultbox {
+    padding: 10px;
+    border: 1px solid var(--button-color);
+    background-color: #2b2d36;
+    color: var(--primary-color);
+    font-family: 'Arial', sans-serif;
+    margin: 10px;
+    border-radius: 20px;
+}
+
+.answerimg {
+    margin: 10px 5px 5px 5px;
+    object-fit: contain;
+    border: 1px solid var(--button-color);
+    border-radius: 10px;
+}
+
+input[type="submit"]:hover, .custom-file-upload:hover, button:hover {
+    transition: 0.2s;
+    background-color: var(--primary-color);
+    color: var(--button-color);
+    scale: 1.05;
+    letter-spacing: 0.5vw;
+}
+
+input[type="submit"], .custom-file-upload, button {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--button-color);
+    color: var(--primary-color);
+    font-family: 'Arial', sans-serif;
+    font-size: 0.88rem;
+    font-weight: normal;
+    margin: 0;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#persistentTextbox {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: #2b2d36;
+    color: var(--primary-color);
+    font-family: 'Arial', sans-serif;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    resize: none;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+input[type="text"] {
+    width: 90px;
+    padding: 5px;
+    border: 1px solid var(--button-color);
+    border-radius: 5px;
+    background-color: #2b2d36;
+    color: var(--primary-color);
+    font-family: 'Arial', sans-serif;
+}
+
+.imagediv {
+    background-color: var(--box-color);
+    border: 1px solid var(--button-color);
+    border-radius: 10px;
+    margin-right: 7px;
+    box-shadow: 0 0 10vw var(--shadow-color);
+}
