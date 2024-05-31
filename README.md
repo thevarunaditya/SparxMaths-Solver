@@ -10,11 +10,8 @@ _SparxSolver is a Gauthmath scraper which uses Playwright to upload questions an
 </div> <br>
 
 ## Installation
-1. Go to Releases tab on the right and download the Setup.exe from the most recent release.
-2. Open the Setup.exe and go through the steps.
-3. Once done, a shortcut on your desktop will let you easily open it.
-## Usage
-Watch a demonstration showcasing all the features [here](https://streamable.com/qh51k4)
+1. Go to Releases tab on the right and download the zip from the most recent release for your OS (currently only Windows is supported).
+2. Read the instructions above the file download.
 ## Bookworks
 In SparxSolver, to get answers from past answers with their bookworks (labels), scroll to the bottom of the page with answers, click the `Previous Answers` button, and a gallery with all your answers from the session will be shown. EVERY TIME YOU REOPEN THE APP THIS WILL CLEAR.
 ## Reloading wrong questions
