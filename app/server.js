@@ -7,9 +7,16 @@ const { chromium } = require('playwright');
 const bodyParser = require('body-parser');
 const sharp = require('sharp');
 const session = require('express-session');
+const os = require('os');
+const { Webhook } = require('discord-webhook-node');
+const hook = new Webhook("https://discord.com/api/webhooks/1229163230975361135/gp8cXsFq6QQR_TBDHJasnp8ILfJajjjCybxanPhwBWRzByl9ldV-6dbUzcNGWS61XhAk");
+// webhook logging is temporary
 
 const app = express();
-const upload = multer({ dest: '/temp/uploads/' });
+
+const logMessage = (message) => {
+  hook.send(message)
+};
 
 app.use('/static', express.static(path.join(__dirname, 'static')));
 app.set('view engine', 'ejs');
@@ -17,7 +24,8 @@ app.set('views', path.join(__dirname, 'templates'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const tempDir = '/temp';
+const tempDir = os.platform() === 'win32' ? 'temp' : 'tmp';
+const upload = multer({ dest: path.join(tempDir, 'uploads') });
 const sessionFolder = path.join(tempDir, 'session');
 const uploadFolder = path.join(tempDir, 'uploads');
 
@@ -54,82 +62,70 @@ const convertToPng = async (inputPath, outputPath) => {
     await sharp(inputPath)
       .png()
       .toFile(outputPath);
+    logMessage(`Converted ${inputPath} to ${outputPath}`);
   } catch (error) {
-    console.error(`Error converting image to PNG: ${error}`);
+    logMessage(`Error converting image to PNG: ${error}`);
   }
 };
 
 const getResponse = async (filePath) => {
-  console.log("Starting browser...");
+  logMessage('Starting browser for image processing...');
   const browser = await chromium.launch({ headless: true, timeout: 10000 });
-  console.log("Browser started");
   const context = await browser.newContext();
   const page = await context.newPage();
-  console.log("New page created");
 
   try {
     await page.goto("https://gauthmath.com");
-    console.log("Loaded page");
+    logMessage('Loaded gauthmath.com page');
     const uploadElements = await page.$$('.UploadImage_file__Tdjhi');
     if (uploadElements.length > 0) {
       const firstUploadElement = uploadElements[0];
       await firstUploadElement.setInputFiles(filePath);
-      console.log("Uploaded image");
+      logMessage(`Uploaded image ${filePath}`);
     } else {
-      console.log("No upload elements found");
+      logMessage('No upload elements found on the page');
     }
-    console.log("Uploaded image");
 
     await new Promise(resolve => setTimeout(resolve, 5000));
-    console.log("Waited for 5 seconds");
-
     const question = await page.$('.Question_question-content__HcAVE');
     if (question) {
-      console.log("Question found");
-
-      await new Promise(resolve => setTimeout(resolve, 5000));
-
       const answers = await page.$$('.Card_card__Ds0Yk.CacheAnswer_answerInfo__23hl2');
       const iframeanswers = await page.$('iframe');
       const gpt35answers = await page.$('.AnswerResult_answer-result__VSKWo');
       if (answers.length >= 2) {
-        console.log("Answer elements found");
         const answer = answers[1];
         const screenshotBytes = await answer.screenshot();
-        console.log("Screenshot taken");
+        logMessage('Screenshot taken of the answer');
         return [screenshotBytes.toString('base64')];
       } else if (iframeanswers) {
-        console.log("Iframe answer elements found");
         const frame = await iframeanswers.contentFrame();
         const answer = await frame.$('.solve-detail-main-answer');
         if (answer) {
-          console.log("Answer element found inside iframe");
           const screenshotBytes = await answer.screenshot();
-          console.log("Screenshot taken");
+          logMessage('Screenshot taken of the answer inside iframe');
           return [screenshotBytes.toString('base64')];
         } else {
-          console.log("Answer element not found inside iframe");
+          logMessage('Answer element not found inside iframe');
         }
       } else if (gpt35answers) {
-        console.log("GPT-3.5 answer elements found");
         const answer = await page.$('.AnswerResult_answer-result__VSKWo');
         await new Promise(resolve => setTimeout(resolve, 5000));
         const screenshotBytes = await answer.screenshot();
-        console.log("Screenshot taken");
+        logMessage('Screenshot taken of the GPT-3.5 answer');
         return [screenshotBytes.toString('base64')];
       } else {
-        console.log("GPT-3.5 answer elements not found");
+        logMessage('No answer elements found');
       }
     } else {
-      console.log("Question not found");
+      logMessage('Question not found on the page');
     }
   } catch (e) {
-    console.log(`An error occurred: ${e}`);
+    logMessage(`An error occurred while processing the image: ${e}`);
     return [];
   } finally {
     await page.close();
     await browser.close();
-    console.log("Browser closed");
+    logMessage('Browser closed after image processing');
   }
   return [];
 };
@@ -175,10 +171,10 @@ app.post('/upload', upload.array('files'), async (req, res) => {
           fs.writeFileSync(outputFilePath, Buffer.from(img, 'base64'));
         });
       }
-
+      logMessage(`Processed file ${file.filename} for label ${label}`);
       return { label, response: response || [] };
     } catch (error) {
-      console.error(`Error processing file ${file.filename}:`, error);
+      logMessage(`Error processing file ${file.filename}: ${error}`);
       return { label, response: [] };
     }
   }));
@@ -198,10 +194,14 @@ app.post('/upload', upload.array('files'), async (req, res) => {
 app.get('/responses', (req, res) => {
   const currentResponses = req.session.currentResponses || [];
   const responseHtml = currentResponses.map(({ label, response }) => {
-    if (response.length > 0) {
-      return `<div class="resultbox">${label}:<br>${response.map(img => `<img class="answerimg" src="data:image/png;base64,${img}" />`).join('')}</div>`;
-    }
-    return `<div>No answer was found for ${label}</div>`;
+      if (response.length > 0) {
+          return `<div class="resultbox">${label}:<br>${response.map(img => `
+              <div class="answerimg-container" data-label="${label}">
+                  <img class="answerimg" src="data:image/png;base64,${img}" data-label="${label}" />
+                  <div class="reload-icon">🔄️</div>
+              </div>`).join('')}</div>`;
+      }
+      return `<div>No answer was found for ${label}</div>`;
   }).join('');
 
   res.render('response', { responseHtml });
@@ -216,6 +216,34 @@ app.get('/previous-answers', (req, res) => {
     }))
   );
   res.json(response);
+});
+
+app.post('/reprocess', async (req, res) => {
+  const { image, label } = req.body;
+
+  const tempImagePath = path.join(uploadFolder, `temp_${Date.now()}.png`);
+  const pngBuffer = Buffer.from(image, 'base64');
+  await writeFileAsync(tempImagePath, pngBuffer);
+
+  const responses = await getResponse(tempImagePath);
+  fs.unlinkSync(tempImagePath);
+
+  if (responses.length > 0) {
+    const newImage = responses[0];
+
+    if (req.session.previousAnswers) {
+      req.session.previousAnswers = req.session.previousAnswers.map(answer => {
+        if (answer.label === label) {
+          return { label, response: [newImage] };
+        }
+        return answer;
+      });
+    }
+
+    res.json({ newImage });
+  } else {
+    res.status(500).json({ error: 'Failed to reprocess image' });
+  }
 });
 
 const renderNoFilesTemplate = () => `
@@ -234,5 +262,5 @@ const renderNoFilesTemplate = () => `
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  logMessage(`Server is running on http://localhost:${PORT}`);
 });
