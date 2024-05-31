@@ -14,8 +14,6 @@ _SparxSolver is a Gauthmath scraper which uses Playwright to upload questions an
 2. Open the setup.bat
 3. Open the sparxsolver.exe
 4. If you want a shortcut on your desktop, create a shortcut of the sparxsolver.exe and drag it to your desktop.
-## Usage
-Watch a demonstration showcasing all the features [here](https://streamable.com/qh51k4)
 ## Bookworks
 In SparxSolver, to get answers from past answers with their bookworks (labels), scroll to the bottom of the page with answers, click the `Previous Answers` button, and a gallery with all your answers from the session will be shown. EVERY TIME YOU REOPEN THE APP THIS WILL CLEAR.
 ## Reloading wrong questions
