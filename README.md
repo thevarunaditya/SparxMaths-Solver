@@ -10,9 +10,10 @@ _SparxSolver is a Gauthmath scraper which uses Playwright to upload questions an
 </div> <br>
 
 ## Installation
-1. Go to Releases tab on the right and download the Setup.exe from the most recent release.
-2. Open the Setup.exe and go through the steps.
-3. Once done, a shortcut on your desktop will let you easily open it.
+1. Go to Releases tab on the right and download the zip from the most recent release for your OS (currently only Windows is supported).
+2. Open the setup.bat
+3. Open the sparxsolver.exe
+4. If you want a shortcut on your desktop, create a shortcut of the sparxsolver.exe and drag it to your desktop.
 ## Usage
 Watch a demonstration showcasing all the features [here](https://streamable.com/qh51k4)
 ## Bookworks
