@@ -3,34 +3,36 @@
     "version": "1.2.0",
     "description": "A native math solver which gets you answers fast and for free.",
     "author": {
-      "name": "Varun-Aditya",
-      "email": "me@varunaditya.xyz"
+        "name": "Varun-Aditya",
+        "email": "me@varunaditya.xyz"
     },
     "main": "app.js",
     "scripts": {
-      "start": "electron . --trace-warnings",
-      "server": "node app.js",
-      "build": "electron-builder",
-      "build:mac": "npm run build:mac-intel && npm run build:mac-arm",
-      "build:mac-intel": "electron-builder --mac --x64 --c.mac.identity=null",
-      "build:mac-arm": "electron-builder --mac --arm64 --c.mac.identity=null",
-      "build:win": "electron-builder --win --x64",
-      "build:linux": "electron-builder --linux --x64",
-      "postinstall": "playwright install && electron-rebuild"
+        "start": "electron . --trace-warnings",
+        "server": "node app.js",
+        "build": "electron-builder",
+        "build:mac": "npm run build:mac-intel && npm run build:mac-arm",
+        "build:mac-intel": "electron-builder --mac --x64 --c.mac.identity=null",
+        "build:mac-arm": "electron-builder --mac --arm64 --c.mac.identity=null",
+        "build:win": "electron-builder --win --x64",
+        "build:win-arm": "electron-builder --win --arm64",
+        "build:linux": "electron-builder --linux --x64",
+        "postinstall": "playwright install && electron-rebuild",
+        "install": "npm uninstall sharp && npm install --platform=darwin --arch=x64 sharp && npm rebuild --platform=darwin --arch=arm64 sharp"
     },
     "dependencies": {
-      "body-parser": "^1.19.0",
-      "discord-webhook-node": "^1.1.8",
-      "ejs": "^3.1.10",
-      "express": "^4.17.1",
-      "express-session": "^1.17.1",
-      "multer": "^1.4.2",
-      "playwright": "^1.44.1",
-      "sharp": "^0.33.4"
+        "body-parser": "^1.19.0",
+        "discord-webhook-node": "^1.1.8",
+        "ejs": "^3.1.10",
+        "express": "^4.17.1",
+        "express-session": "^1.17.1",
+        "multer": "^1.4.2",
+        "playwright": "^1.44.1",
+        "sharp": "^0.33.4"
     },
     "devDependencies": {
-      "electron": "^24.8.8",
-      "electron-builder": "^24.13.3",
-      "playwright": "^1.44.1"
+        "electron": "^24.8.8",
+        "electron-builder": "^24.13.3",
+        "playwright": "^1.44.1"
     }
-  }  
+}
