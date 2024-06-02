@@ -1,0 +1,28 @@
+{
+  "appId": "com.varunaditya.sparxsolver",
+  "productName": "SparxMaths-Solver",
+  "files": [
+    "static/**",
+    "templates/**",
+    "app.js",
+    "package.json",
+    "node_modules/**"
+  ],
+  "directories": {
+    "output": "build"
+  },
+  "win": {
+    "target": "nsis",
+    "icon": "logo.ico"
+  },
+  "mac": {
+    "target": "dmg",
+    "icon": "logo.icns",
+    "hardenedRuntime": false,
+    "gatekeeperAssess": false,
+    "sign": false
+  },
+  "linux": {
+    "target": "AppImage"
+  }
+}

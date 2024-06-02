@@ -5,7 +5,7 @@
 
 _SparxSolver is a Gauthmath scraper which uses Playwright to upload questions and get answers simultaneously._ <br>
 
-![SparxSolver](https://img.shields.io/badge/SparxSolver-1.0-%234696f7) [![varunaditya.xyz](https://img.shields.io/badge/varunaditya.xyz-%234696f7)](https://varunaditya.xyz) [![Demonstration](https://img.shields.io/badge/Demonstration-gray)](https://streamable.com/qh51k4)
+![SparxSolver](https://img.shields.io/badge/SparxSolver-1.1-%234696f7) [![varunaditya.xyz](https://img.shields.io/badge/varunaditya.xyz-%234696f7)](https://varunaditya.xyz) [![Demonstration](https://img.shields.io/badge/Demonstration-gray)](https://streamable.com/qh51k4)
 
 </div> <br>
 

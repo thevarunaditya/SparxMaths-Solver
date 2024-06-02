@@ -1,19 +1,36 @@
 {
-  "name": "sparxsolver",
-  "version": "1.1",
-  "description": "Fully native SparxMaths solver.",
-  "main": "main.js",
-  "scripts": {
-      "start": "electron .",
-      "package-win": "electron-packager . --platform=win32 --arch=x64 --out=release-builds --overwrite --icon=logo.ico",
-      "package-mac-intel": "electron-packager . --platform=darwin --arch=x64 --out=release-builds --overwrite --icon=logo.icns",
-      "package-mac-arm": "electron-packager . --platform=darwin --arch=arm64 --out=release-builds --overwrite --icon=logo.icns"
-  },
-  "devDependencies": {
-      "electron": "^25.3.0",
-      "electron-packager": "^16.0.0"
-  },
-  "dependencies": {
-      "discord-webhook-node": "^1.1.8"
-  }
-}
+    "name": "SparxMaths-Solver",
+    "version": "1.2.0",
+    "description": "A native math solver which gets you answers fast and for free.",
+    "author": {
+      "name": "Varun-Aditya",
+      "email": "me@varunaditya.xyz"
+    },
+    "main": "app.js",
+    "scripts": {
+      "start": "electron . --trace-warnings",
+      "server": "node app.js",
+      "build": "electron-builder",
+      "build:mac": "npm run build:mac-intel && npm run build:mac-arm",
+      "build:mac-intel": "electron-builder --mac --x64 --c.mac.identity=null",
+      "build:mac-arm": "electron-builder --mac --arm64 --c.mac.identity=null",
+      "build:win": "electron-builder --win --x64",
+      "build:linux": "electron-builder --linux --x64",
+      "postinstall": "playwright install && electron-rebuild"
+    },
+    "dependencies": {
+      "body-parser": "^1.19.0",
+      "discord-webhook-node": "^1.1.8",
+      "ejs": "^3.1.10",
+      "express": "^4.17.1",
+      "express-session": "^1.17.1",
+      "multer": "^1.4.2",
+      "playwright": "^1.44.1",
+      "sharp": "^0.33.4"
+    },
+    "devDependencies": {
+      "electron": "^24.8.8",
+      "electron-builder": "^24.13.3",
+      "playwright": "^1.44.1"
+    }
+  }  
