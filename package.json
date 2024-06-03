@@ -14,9 +14,7 @@
         "build:mac": "npm run build:mac-intel && npm run build:mac-arm",
         "build:mac-intel": "electron-builder --mac --x64 --c.mac.identity=null",
         "build:mac-arm": "electron-builder --mac --arm64 --c.mac.identity=null",
-        "build:win": "npm run build:win-intel && npm run build:win-arm",
-        "build:win-intel": "electron-builder --win --x64",
-        "build:win-arm": "electron-builder --win --arm64",
+        "build:win": "electron-builder --win --x64",
         "build:all": "npm run build:mac && npm run build:win",
         "postinstall": "playwright install && electron-rebuild"
     },
