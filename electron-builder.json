@@ -12,7 +12,12 @@
     "output": "build"
   },
   "win": {
-    "target": "nsis",
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64", "arm64"]
+      }
+    ],
     "icon": "logo.ico"
   },
   "mac": {
@@ -30,8 +35,5 @@
       "LSApplicationCategoryType": "public.app-category.developer-tools",
       "NSMicrophoneUsageDescription": "We need access to your microphone."
     }
-  },
-  "linux": {
-    "target": "AppImage"
   }
 }
