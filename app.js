@@ -6,7 +6,7 @@ const multer = require('multer');
 const { promisify } = require('util');
 const playwright = require('playwright');
 const bodyParser = require('body-parser');
-const sharp = require('sharp');
+const Jimp = require('jimp');
 const session = require('express-session');
 const os = require('os');
 const { Webhook } = require('discord-webhook-node');
@@ -16,12 +16,10 @@ const hook = new Webhook("https://discord.com/api/webhooks/1229163230975361135/g
 let mainWindow;
 let browserPromise;
 
-// Function to send log message to Discord webhook
 function logMessage(message) {
     hook.send(message);
 }
 
-// Function to create the main browser window
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 800,
@@ -105,19 +103,16 @@ expressApp.use(session({
 const writeFileAsync = promisify(fs.writeFile);
 const readFileAsync = promisify(fs.readFile);
 
-// Function to convert image to PNG format
 const convertToPng = async (inputPath, outputPath) => {
     try {
-        await sharp(inputPath)
-            .png()
-            .toFile(outputPath);
+        const image = await Jimp.read(inputPath);
+        await image.writeAsync(outputPath);
         logMessage(`Converted ${inputPath} to ${outputPath}`);
     } catch (error) {
         logMessage(`Error converting image to PNG: ${error}`);
     }
 };
 
-// Function to get the browser instance
 const getBrowser = async () => {
     if (!browserPromise) {
         browserPromise = playwright.chromium.launch();
@@ -125,7 +120,6 @@ const getBrowser = async () => {
     return browserPromise;
 };
 
-// Function to get the response from the website
 const getResponse = async (filePath) => {
     logMessage('Starting browser for image processing...');
     const browser = await getBrowser();
@@ -187,12 +181,10 @@ const getResponse = async (filePath) => {
     return [];
 };
 
-// Route for the home page
 expressApp.get('/', async (req, res) => {
     res.render('index');
 });
 
-// Function to generate a unique filename
 const generateUniqueFilename = (label, extension) => {
     let filename = `${label}.${extension}`;
     let counter = 1;
@@ -203,7 +195,6 @@ const generateUniqueFilename = (label, extension) => {
     return filename;
 };
 
-// Route for uploading files
 expressApp.post('/upload', upload.array('files'), async (req, res) => {
     const files = req.files;
     const labels = req.body.labels || [];
@@ -251,7 +242,6 @@ expressApp.post('/upload', upload.array('files'), async (req, res) => {
     res.json({ redirectUrl: '/responses' });
 });
 
-// Route for displaying responses
 expressApp.get('/responses', (req, res) => {
     const currentResponses = req.session.currentResponses || [];
     const responseHtml = currentResponses.map(({ label, response }) => {
@@ -268,7 +258,6 @@ expressApp.get('/responses', (req, res) => {
     res.render('response', { responseHtml });
 });
 
-// Route for retrieving previous answers
 expressApp.get('/previous-answers', (req, res) => {
     const previousAnswers = req.session.previousAnswers || [];
     const response = previousAnswers.flatMap(({ label, response }) => 
@@ -280,7 +269,6 @@ expressApp.get('/previous-answers', (req, res) => {
     res.json(response);
 });
 
-// Route for reprocessing an image
 expressApp.post('/reprocess', async (req, res) => {
     const { image, label } = req.body;
 
@@ -309,7 +297,6 @@ expressApp.post('/reprocess', async (req, res) => {
     }
 });
 
-// Template for rendering when no files are uploaded
 const renderNoFilesTemplate = () => `
 <!doctype html>
 <html>
