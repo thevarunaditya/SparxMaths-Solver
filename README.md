@@ -1,3 +1,4 @@
+$${\color{gold}\space Please\space star\space this\space repository}{\color{gold},\space as\space it\space helps\space promote\space this\space project\space}$$<br>
 
 <div align='center'>
 
@@ -7,7 +8,7 @@ _SparxSolver is a Gauthmath scraper which uses Playwright to upload questions an
 
 ![SparxSolver](https://img.shields.io/badge/SparxSolver-1.1-%234696f7) [![varunaditya.xyz](https://img.shields.io/badge/varunaditya.xyz-%234696f7)](https://varunaditya.xyz) [![Demonstration](https://img.shields.io/badge/Demonstration-gray)](https://streamable.com/qh51k4)
 
-</div> <br>
+</div>
 
 ## Installation
 Go to the releases section on the right and follow the instructions.
